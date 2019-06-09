@@ -65,5 +65,14 @@ export default {
 		*/
 		extend(config, ctx) {
 		}
-	}
+
+	},
+	/*
+	** Configure webpack to pick up file changes
+	*/
+	watchers: {
+		webpack: {
+			poll: true,
+		},
+	},
 }
