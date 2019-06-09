@@ -7,7 +7,6 @@
 		:to='`/${link}`'
 		color='primary'
 		large
-		target='_blank'
 		v-for='link in links'
 		>
 			{{ link }}
