@@ -1,19 +1,18 @@
 <script>
-const SIGNALS = [
-	'fade',
-	'go',
-	'off',
-	'reset',
-]
+import { mapState } from 'vuex'
 
 export default {
 	data() {
 		return {
-			SIGNALS,
-			activeSignal: null,
 			message: 'Waiting for input ...',
 			peerId: null,
 		}
+	},
+	computed: {
+		...mapState('signals', [
+			'SIGNALS',
+			'active',
+		]),
 	},
 	methods: {
 		joinPeer() {
@@ -30,9 +29,9 @@ export default {
 		signalPeer(signal) {
 			const { conn } = this.$peer
 
-			if (conn.open) {
+			if (conn && conn.open) {
 				conn.send(signal)
-				this.activeSignal = signal
+				this.$store.commit('signals/SET_ACTIVE', signal)
 			}
 		},
 	},
@@ -62,13 +61,6 @@ export default {
 				<v-flex>
 					{{ message }}
 				</v-flex>
-				<v-flex>
-					<v-btn
-					@click='signalPeer'
-					>
-						Signaling
-					</v-btn>
-				</v-flex>
 			</v-layout>
 			<v-layout>
 				<v-flex
@@ -76,7 +68,7 @@ export default {
 				v-for='signal in SIGNALS'
 				>
 					<v-btn
-					:color='`${ signal === activeSignal ? "info" : "accent" }`'
+					:color='`${ signal === active ? "info" : "accent" }`'
 					@click='signalPeer(signal)'
 					>
 						{{ signal }}
