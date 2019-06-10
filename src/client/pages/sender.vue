@@ -21,8 +21,6 @@ export default {
 
 				this.$peer.conn.on('open', () => {
 					this.message = `Connected to peer ${this.peerId}`
-
-					this.$peer.conn.send('Sending a new message')
 				})
 			}
 		},
