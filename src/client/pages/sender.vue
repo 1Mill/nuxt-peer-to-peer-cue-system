@@ -1,28 +1,17 @@
 <script>
-import { mapState } from 'vuex';
-
 export default {
 	data() {
 		return {
 			peerId: null,
 		}
 	},
-	computed: {
-		...mapState([
-			'peer',
-		]),
-		message() {
-			return this.peer && this.peer.connect().open ? "Connected" : "Waiting for input ..."
-		}
-	},
 	methods: {
-		connectToPeer() {
-			// * Remove whitespace from input
+		joinPeer() {
 			if (this.peerId) {
-				const conn = this.peer.connect(this.peerId.trim())
+				const conn = this.$peer.connect(this.peerId.trim())
 
 				conn.on('open', () => {
-					conn.send('Sending a message')
+					conn.send('Sending a new message')
 				})
 			}
 		},
@@ -43,15 +32,12 @@ export default {
 					v-model='peerId'
 					/>
 					<v-btn
-					@click='connectToPeer'
+					@click='joinPeer'
 					color='primary'
 					small
 					>
 						Connect
 					</v-btn>
-				</v-flex>
-				<v-flex xs12>
-					<strong>{{ message }}</strong>
 				</v-flex>
 			</v-layout>
 		</v-container>

@@ -1,34 +1,36 @@
-<script>
-import { mapState } from 'vuex'
+<template>
+	<div>
+		<h1>Reciever</h1>
+		<div>
+			My ID: <strong>{{ $peer.id }}</strong>
+		</div>
+		<div>
+			<strong>{{ message }}</strong>
+		</div>
+	</div>
+</template>
 
+<script>
 export default {
-	computed: {
-		...mapState([
-			'peer',
-		]),
-		message() {
-			// * Is there an open connection with a peer?
-			return (this.peer && this.peer.connect().open) ? "Connected to peer" : "Awaiting connection ..."
-		},
+	data() {
+		return {
+			message: 'Waiting for connection ...',
+		}
+	},
+	mounted() {
+		// * Watch for connections from other peers
+		this.$peer.on('connection', (conn) => {
+			this.message = 'Connected'
+
+			// * Watch for data transmitions (s.e.d conn.send) from other peers
+			conn.on('open', () => {
+				conn.on('data', (data) => {
+					// * `data` is the data sent from the peer
+					console.log(data)
+				});
+			});
+		});
 	},
 }
 </script>
 
-
-<template>
-	<div>
-		<h1>Reciever</h1>
-
-		<v-container>
-			<v-layout>
-				<v-flex>
-					Status:
-					<br/>
-					Your peer ID: <strong>{{ peer && peer.id }}</strong>
-					<br/>
-					<strong>{{ message }}</strong>
-				</v-flex>
-			</v-layout>
-		</v-container>
-	</div>
-</template>

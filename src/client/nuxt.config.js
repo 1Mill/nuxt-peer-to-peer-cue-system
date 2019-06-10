@@ -34,6 +34,7 @@ export default {
 	** Plugins to load before mounting the App
 	*/
 	plugins: [
+		'@plugins/inject-peerjs.client.js',
 	],
 	/*
 	** Nuxt.js modules
